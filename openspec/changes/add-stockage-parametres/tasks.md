@@ -9,7 +9,7 @@
 - [x] 2.3 Rattacher chaque mesure à la bonne session selon les plages horaires
 
 ## 3. Rappels
-- [ ] 3.1 Installer expo-notifications et demander l'autorisation
+- [x] 3.1 Installer expo-notifications et demander l'autorisation
 - [ ] 3.2 Programmer les rappels quotidiens du matin et du soir, désactivables
 
 ## 4. Vérification
