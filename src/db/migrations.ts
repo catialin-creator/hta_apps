@@ -23,6 +23,14 @@ const MIGRATIONS: readonly string[] = [
   );
   CREATE INDEX mesure_horodatage ON mesure (horodatage);
   `,
+  // 2 : paramètres modifiés par l'utilisateur (spec « parametres »).
+  // Seules les valeurs changées sont stockées ; les autres prennent leur valeur par défaut.
+  `
+  CREATE TABLE parametre (
+    cle    TEXT PRIMARY KEY,
+    valeur TEXT NOT NULL                                        -- valeur encodée en JSON
+  );
+  `,
 ];
 
 /** Applique, dans une transaction chacune, les migrations pas encore passées. */
