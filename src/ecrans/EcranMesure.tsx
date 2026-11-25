@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AppState, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
 
+import { useLectureNombres } from '../lecture/useLectureNombres';
 import { couleurs, tailles } from '../ui/theme';
 
 interface Props {
@@ -27,6 +28,7 @@ export function EcranMesure({ onOuvrirParametres }: Props) {
   const { hasPermission, canRequestPermission, requestPermission } = useCameraPermission();
   const camera = useCameraDevice('back');
   const auPremierPlan = useAuPremierPlan();
+  const lecture = useLectureNombres();
 
   useEffect(() => {
     if (canRequestPermission) {
@@ -59,7 +61,24 @@ export function EcranMesure({ onOuvrirParametres }: Props) {
     );
   } else {
     contenu = (
-      <Camera style={StyleSheet.absoluteFill} device={camera} isActive={auPremierPlan} />
+      <>
+        <Camera
+          style={StyleSheet.absoluteFill}
+          device={camera}
+          isActive={auPremierPlan}
+          outputs={[lecture.sortie]}
+        />
+        {__DEV__ && (
+          // Aide au développement uniquement : nombres actuellement lus par la caméra.
+          <View style={styles.debug} pointerEvents="none">
+            <Text style={styles.texteDebug}>
+              {lecture.nombres.length > 0
+                ? lecture.nombres.map((n) => n.valeur).join('  ·  ')
+                : 'Aucun nombre lu'}
+            </Text>
+          </View>
+        )}
+      </>
     );
   }
 
@@ -127,5 +146,20 @@ const styles = StyleSheet.create({
   },
   presse: {
     opacity: 0.75,
+  },
+  debug: {
+    position: 'absolute',
+    left: tailles.marge,
+    right: tailles.marge,
+    bottom: 48,
+    padding: 12,
+    borderRadius: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  texteDebug: {
+    fontSize: tailles.texte,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
 });

@@ -4,7 +4,7 @@
 - [x] 1.3 Écran Mesure : caméra plein écran, demande d'autorisation, aucune image enregistrée
 
 ## 2. Lecture
-- [ ] 2.1 Frame processor : extraire les nombres visibles
+- [x] 2.1 Frame processor : extraire les nombres visibles
 - [ ] 2.2 Repérer systolique, diastolique et pouls (position et ordre de grandeur)
 - [ ] 2.3 Valider une mesure stable sur plusieurs images consécutives
 - [ ] 2.4 Ignorer une mesure identique à la dernière enregistrée
