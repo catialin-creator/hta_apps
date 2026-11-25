@@ -39,3 +39,16 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Bases de données locales de test
+*.db
+*.sqlite
+
+# Réglages personnels de Claude Code (le fichier partagé .claude/settings.json reste suivi)
+.claude/settings.local.json
+CLAUDE.local.md
