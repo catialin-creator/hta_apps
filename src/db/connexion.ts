@@ -2,6 +2,8 @@ import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 import * as SQLite from 'expo-sqlite';
 
+import { migrer } from './migrations';
+
 /** Nom du fichier de base, stocké uniquement sur le téléphone. */
 const NOM_BASE = 'tension.db';
 
@@ -41,6 +43,7 @@ async function ouvrir(): Promise<SQLite.SQLiteDatabase> {
   await base.execAsync(`PRAGMA key = "x'${cle}'";`);
   // Vérifie que la base est lisible avec cette clé (échoue sinon).
   await base.getFirstAsync('SELECT count(*) FROM sqlite_master;');
+  await migrer(base);
   return base;
 }
 

@@ -1,6 +1,6 @@
 ## 1. Base de données
 - [x] 1.1 Installer expo-sqlite et activer le chiffrement SQLCipher
-- [ ] 1.2 Créer la table Mesure et le système de migrations
+- [x] 1.2 Créer la table Mesure et le système de migrations
 - [ ] 1.3 Écrire les fonctions ajouter, corriger, supprimer, lister par période
 
 ## 2. Paramètres
