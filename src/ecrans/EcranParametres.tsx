@@ -40,7 +40,20 @@ export function formaterHeure(minutes: MinutesDuJour): string {
  * Les bornes des réglages empêchent toute plage incohérente (début après la fin,
  * ou matin qui chevauche le soir).
  */
-export function EcranParametres() {
+function BoutonRetour({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel="Retour à l'écran Mesure"
+      style={({ pressed }) => [styles.boutonRetour, pressed && styles.boutonPresse]}
+    >
+      <Text style={styles.texteRetour}>‹ Retour</Text>
+    </Pressable>
+  );
+}
+
+export function EcranParametres({ onRetour }: { onRetour: () => void }) {
   const [parametres, setParametres] = useState<Parametres | null>(null);
   const [etat, setEtat] = useState<Etat>('chargement');
 
@@ -60,7 +73,10 @@ export function EcranParametres() {
     return (
       <View style={[styles.ecran, styles.centre]}>
         {etat === 'erreur' ? (
-          <Text style={styles.messageErreur}>Impossible de lire les paramètres.</Text>
+          <>
+            <Text style={styles.messageErreur}>Impossible de lire les paramètres.</Text>
+            <BoutonRetour onPress={onRetour} />
+          </>
         ) : (
           <ActivityIndicator size="large" color={couleurs.principal} />
         )}
@@ -113,6 +129,7 @@ export function EcranParametres() {
   return (
     <View style={styles.ecran}>
       <ScrollView contentContainerStyle={styles.contenu}>
+        <BoutonRetour onPress={onRetour} />
         <Text style={styles.titre} accessibilityRole="header">
           Paramètres
         </Text>
@@ -229,6 +246,18 @@ const styles = StyleSheet.create({
   contenu: {
     padding: tailles.marge,
     paddingTop: 56,
+  },
+  boutonRetour: {
+    alignSelf: 'flex-start',
+    minHeight: tailles.zoneTactile - 8,
+    justifyContent: 'center',
+    paddingRight: 16,
+    marginBottom: 8,
+  },
+  texteRetour: {
+    fontSize: tailles.texte,
+    fontWeight: '700',
+    color: couleurs.principal,
   },
   titre: {
     fontSize: tailles.titre,

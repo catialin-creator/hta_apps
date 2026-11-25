@@ -7,6 +7,7 @@ allumée en continu doit lire l'écran et enregistrer la mesure sans aucune mani
 - Validation d'une mesure stable sur plusieurs images, sans doublon.
 - Saisie manuelle si la lecture échoue ou paraît incohérente.
 - Bip après le délai réglé, jusqu'à la dernière mesure de la session.
+- Écran Mesure comme écran d'accueil, avec accès secondaire aux Paramètres.
 
 ## Impact
 - Spec touchée : `capture-mesure`.
