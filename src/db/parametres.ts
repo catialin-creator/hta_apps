@@ -58,12 +58,13 @@ export async function lireParametres(): Promise<Parametres> {
 /** Enregistre les paramètres modifiés, en une seule transaction. */
 export async function enregistrerParametres(modifications: Partial<Parametres>): Promise<void> {
   const base = await obtenirBase();
-  await base.withExclusiveTransactionAsync(async (transaction) => {
+  // Pas de withExclusiveTransactionAsync : sa nouvelle connexion n'aurait pas la clé SQLCipher.
+  await base.withTransactionAsync(async () => {
     for (const [cle, valeur] of Object.entries(modifications)) {
       if (!estCle(cle) || valeur === undefined) {
         continue;
       }
-      await transaction.runAsync(
+      await base.runAsync(
         `INSERT INTO parametre (cle, valeur) VALUES (?, ?)
          ON CONFLICT (cle) DO UPDATE SET valeur = excluded.valeur;`,
         cle,

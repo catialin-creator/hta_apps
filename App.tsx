@@ -12,8 +12,9 @@ export default function App() {
     // et on (re)programme les rappels, sauf si l'utilisateur les a désactivés.
     lireParametres()
       .then(mettreAJourRappels)
-      .catch(() => {
+      .catch((erreur) => {
         // Sans autorisation ni paramètres lisibles, l'application reste utilisable sans rappels.
+        console.warn('Rappels non programmés :', erreur);
       });
   }, []);
 

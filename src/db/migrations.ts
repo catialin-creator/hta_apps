@@ -57,15 +57,21 @@ const MIGRATIONS: readonly string[] = [
   `,
 ];
 
-/** Applique, dans une transaction chacune, les migrations pas encore passées. */
+/**
+ * Applique, dans une transaction chacune, les migrations pas encore passées.
+ * Appelée à l'ouverture, avant que la base soit disponible pour le reste de l'application :
+ * aucune autre requête ne peut s'intercaler.
+ */
 export async function migrer(base: SQLiteDatabase): Promise<void> {
   const ligne = await base.getFirstAsync<{ user_version: number }>('PRAGMA user_version;');
   const versionActuelle = ligne?.user_version ?? 0;
 
   for (let version = versionActuelle + 1; version <= MIGRATIONS.length; version++) {
-    await base.withExclusiveTransactionAsync(async (transaction) => {
-      await transaction.execAsync(MIGRATIONS[version - 1]);
-      await transaction.execAsync(`PRAGMA user_version = ${version};`);
+    // Pas de withExclusiveTransactionAsync : il ouvre une nouvelle connexion,
+    // qui n'aurait pas la clé SQLCipher et ne pourrait pas lire la base.
+    await base.withTransactionAsync(async () => {
+      await base.execAsync(MIGRATIONS[version - 1]);
+      await base.execAsync(`PRAGMA user_version = ${version};`);
     });
   }
 }

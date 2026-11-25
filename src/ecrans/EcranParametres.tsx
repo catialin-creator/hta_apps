@@ -50,7 +50,10 @@ export function EcranParametres() {
         setParametres(lus);
         setEtat('pret');
       })
-      .catch(() => setEtat('erreur'));
+      .catch((erreur) => {
+        console.error('Lecture des paramètres impossible :', erreur);
+        setEtat('erreur');
+      });
   }, []);
 
   if (!parametres) {
@@ -76,7 +79,8 @@ export function EcranParametres() {
       await enregistrerParametres(parametres);
       const rappels = await mettreAJourRappels(parametres);
       setEtat(rappels === 'non-autorises' ? 'rappelsNonAutorises' : 'enregistre');
-    } catch {
+    } catch (erreur) {
+      console.error('Enregistrement des paramètres impossible :', erreur);
       setEtat('erreur');
     }
   };
