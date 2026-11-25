@@ -6,7 +6,7 @@
 ## 2. Paramètres
 - [x] 2.1 Stocker les paramètres avec leurs valeurs par défaut (délai 5 min, 3 mesures)
 - [x] 2.2 Écran Paramètres : plages matin et soir, délai, nombre de mesures
-- [ ] 2.3 Rattacher chaque mesure à la bonne session selon les plages horaires
+- [x] 2.3 Rattacher chaque mesure à la bonne session selon les plages horaires
 
 ## 3. Rappels
 - [ ] 3.1 Installer expo-notifications et demander l'autorisation

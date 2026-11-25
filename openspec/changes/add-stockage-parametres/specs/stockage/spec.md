@@ -5,7 +5,7 @@ Le système SHALL enregistrer chaque mesure dans une base SQLite locale chiffré
 
 #### Scenario: Enregistrement d'une mesure
 - **WHEN** une mesure est validée
-- **THEN** la base contient l'horodatage, la systolique, la diastolique, le pouls, la session, le rang, la source (auto ou manuel) et l'indice de confiance
+- **THEN** la base contient l'horodatage, la systolique, la diastolique, le pouls, la session et le rang (absents pour une mesure hors session), la source (auto ou manuel) et l'indice de confiance
 
 #### Scenario: Utilisation hors connexion
 - **WHEN** le téléphone n'a pas de réseau

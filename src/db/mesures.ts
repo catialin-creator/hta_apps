@@ -11,9 +11,10 @@ export interface Mesure {
   systolique: number;
   diastolique: number;
   pouls: number;
-  session: Session;
-  /** Position de la mesure dans la session : 1, 2, 3… */
-  rang: number;
+  /** null : mesure « hors session », prise en dehors des plages horaires. */
+  session: Session | null;
+  /** Position de la mesure dans la session : 1, 2, 3… ; null hors session. */
+  rang: number | null;
   source: Source;
   /** Indice de confiance de la lecture caméra, entre 0 et 1 ; null pour une saisie manuelle. */
   confiance: number | null;

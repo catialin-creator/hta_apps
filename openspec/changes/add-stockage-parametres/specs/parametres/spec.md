@@ -15,6 +15,10 @@ Le système SHALL permettre de régler les plages horaires du matin (6 h – 10 
 - **WHEN** une mesure est prise dans la plage du matin
 - **THEN** elle est rattachée à la session du matin du jour
 
+#### Scenario: Mesure hors des plages
+- **WHEN** une mesure est prise en dehors des plages du matin et du soir
+- **THEN** elle est enregistrée « hors session », sans session ni rang
+
 #### Scenario: Délai modifié
 - **WHEN** l'utilisateur règle le délai sur une autre valeur
 - **THEN** le bip suivant respecte ce nouveau délai

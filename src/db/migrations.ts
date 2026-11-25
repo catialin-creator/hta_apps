@@ -31,6 +31,30 @@ const MIGRATIONS: readonly string[] = [
     valeur TEXT NOT NULL                                        -- valeur encodée en JSON
   );
   `,
+  // 3 : mesures « hors session » (prises hors des plages) : session et rang deviennent
+  // facultatifs, mais toujours ensemble. SQLite ne sait pas modifier une contrainte CHECK :
+  // la table est recréée et les mesures recopiées.
+  `
+  CREATE TABLE mesure_nouvelle (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    horodatage  INTEGER NOT NULL,
+    systolique  INTEGER NOT NULL CHECK (systolique > 0),
+    diastolique INTEGER NOT NULL CHECK (diastolique > 0),
+    pouls       INTEGER NOT NULL CHECK (pouls > 0),
+    session     TEXT    CHECK (session IS NULL OR session IN ('matin', 'soir')), -- NULL : hors session
+    rang        INTEGER CHECK (rang IS NULL OR rang >= 1),
+    source      TEXT    NOT NULL CHECK (source IN ('auto', 'manuel')),
+    confiance   REAL    CHECK (confiance IS NULL OR (confiance >= 0 AND confiance <= 1)),
+    CHECK ((session IS NULL) = (rang IS NULL))
+  );
+  INSERT INTO mesure_nouvelle
+    (id, horodatage, systolique, diastolique, pouls, session, rang, source, confiance)
+    SELECT id, horodatage, systolique, diastolique, pouls, session, rang, source, confiance
+      FROM mesure;
+  DROP TABLE mesure;
+  ALTER TABLE mesure_nouvelle RENAME TO mesure;
+  CREATE INDEX mesure_horodatage ON mesure (horodatage);
+  `,
 ];
 
 /** Applique, dans une transaction chacune, les migrations pas encore passées. */
