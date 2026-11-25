@@ -39,7 +39,22 @@
         }
       ],
       "expo-secure-store",
-      "expo-notifications"
+      "expo-notifications",
+      [
+        "react-native-vision-camera-ocr-plus",
+        {
+          "disableTranslate": true,
+          "disableNonLatinTextRecognition": true
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
+        }
+      ]
     ],
     "extra": {
       "eas": {

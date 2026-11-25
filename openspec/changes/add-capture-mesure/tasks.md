@@ -1,6 +1,6 @@
 ## 1. Caméra
 - [x] 1.1 Installer expo-dev-client et react-native-vision-camera, construire le development build
-- [ ] 1.2 Installer la reconnaissance de texte ML Kit pour les frame processors
+- [x] 1.2 Installer la reconnaissance de texte ML Kit pour les frame processors
 - [ ] 1.3 Écran Mesure : caméra plein écran, demande d'autorisation, aucune image enregistrée
 
 ## 2. Lecture
