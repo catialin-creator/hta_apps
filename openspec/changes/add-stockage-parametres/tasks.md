@@ -10,7 +10,7 @@
 
 ## 3. Rappels
 - [x] 3.1 Installer expo-notifications et demander l'autorisation
-- [ ] 3.2 Programmer les rappels quotidiens du matin et du soir, désactivables
+- [x] 3.2 Programmer les rappels quotidiens du matin et du soir, désactivables
 
 ## 4. Vérification
 - [ ] 4.1 Tester hors connexion, correction, suppression et changement de délai

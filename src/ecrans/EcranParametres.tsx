@@ -7,6 +7,8 @@ import {
   type MinutesDuJour,
   type Parametres,
 } from '../db/parametres';
+import { mettreAJourRappels } from '../rappels/rappels';
+import { Interrupteur } from '../ui/Interrupteur';
 import { Reglage } from '../ui/Reglage';
 import { couleurs, tailles } from '../ui/theme';
 
@@ -18,7 +20,13 @@ const DELAI_MAX = 30;
 const MESURES_MIN = 1;
 const MESURES_MAX = 6;
 
-type Etat = 'chargement' | 'pret' | 'enregistrement' | 'enregistre' | 'erreur';
+type Etat =
+  | 'chargement'
+  | 'pret'
+  | 'enregistrement'
+  | 'enregistre'
+  | 'rappelsNonAutorises'
+  | 'erreur';
 
 export function formaterHeure(minutes: MinutesDuJour): string {
   if (minutes === MINUIT) return 'minuit';
@@ -66,13 +74,37 @@ export function EcranParametres() {
     setEtat('enregistrement');
     try {
       await enregistrerParametres(parametres);
-      setEtat('enregistre');
+      const rappels = await mettreAJourRappels(parametres);
+      setEtat(rappels === 'non-autorises' ? 'rappelsNonAutorises' : 'enregistre');
     } catch {
       setEtat('erreur');
     }
   };
 
-  const { plageMatin, plageSoir, delaiMinutes, mesuresParSession } = parametres;
+  const {
+    plageMatin,
+    plageSoir,
+    delaiMinutes,
+    mesuresParSession,
+    rappelsActives,
+    heureRappelMatin,
+    heureRappelSoir,
+  } = parametres;
+
+  const reglerHeureRappel = (
+    cle: 'heureRappelMatin' | 'heureRappelSoir',
+    libelle: string,
+    valeur: MinutesDuJour,
+  ) => (
+    <Reglage
+      libelle={libelle}
+      valeurAffichee={formaterHeure(valeur)}
+      peutDiminuer={valeur - PAS_HORAIRE >= 0}
+      peutAugmenter={valeur + PAS_HORAIRE < MINUIT}
+      onDiminuer={() => modifier({ [cle]: valeur - PAS_HORAIRE })}
+      onAugmenter={() => modifier({ [cle]: valeur + PAS_HORAIRE })}
+    />
+  );
 
   return (
     <View style={styles.ecran}>
@@ -140,14 +172,31 @@ export function EcranParametres() {
           onDiminuer={() => modifier({ mesuresParSession: mesuresParSession - 1 })}
           onAugmenter={() => modifier({ mesuresParSession: mesuresParSession + 1 })}
         />
+
+        <Text style={styles.section} accessibilityRole="header">
+          Rappels
+        </Text>
+        <Interrupteur
+          libelle="Rappels quotidiens"
+          active={rappelsActives}
+          onChange={(active) => modifier({ rappelsActives: active })}
+        />
+        {rappelsActives && (
+          <>
+            {reglerHeureRappel('heureRappelMatin', 'Rappel du matin', heureRappelMatin)}
+            {reglerHeureRappel('heureRappelSoir', 'Rappel du soir', heureRappelSoir)}
+          </>
+        )}
       </ScrollView>
 
       <View style={styles.pied}>
         <Text
-          style={etat === 'erreur' ? styles.messageErreur : styles.messageSucces}
+          style={etat === 'enregistre' ? styles.messageSucces : styles.messageErreur}
           accessibilityLiveRegion="polite"
         >
           {etat === 'enregistre' && 'Paramètres enregistrés.'}
+          {etat === 'rappelsNonAutorises' &&
+            'Paramètres enregistrés, mais les rappels ne sont pas autorisés. Autorisez les notifications dans les réglages du téléphone.'}
           {etat === 'erreur' && "L'enregistrement a échoué. Réessayez."}
         </Text>
         <Pressable
